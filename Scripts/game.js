@@ -1,9 +1,15 @@
-import { gameModeSet, gameIsTrue } from "./app.js"
+import { gameModeSet, gameIsTrue, isPlayCpuTrue, EndScreen } from "./app.js"
 
 var playOptions = ["Paper", "Rock", "Lizard", "Spock", "Scissors"];
 
 let playerOneHP;
 let playerTwoHP;
+
+let cycleInterval;
+let isPaused = false;
+
+let playerOneisWin = false;
+let playerTwoisWin = false;
 
 let playerOneChoice = "";
 let playerTwoChoice = "";
@@ -12,6 +18,60 @@ let cpuChoice = "";
 let PlayerOneChoiceMade = false;
 let playerTwoChoiceMade = false;
 let CpuChoiceMade = false;
+
+
+function ImgCycle() {
+    let i = 0;
+    playerOneImg.src = './Assets/Imgs/questionMark.png';
+    playerTwoImg.src = './Assets/Imgs/Rock.png'
+    function cycle() {
+        if (i < playOptions.length) {
+            playerTwoImg.src = `./Assets/Imgs/${playOptions[i]}.png`;
+            i++;
+        } else {
+            i = 0;
+            playerTwoImg.src = `./Assets/Imgs/${playOptions[i]}.png`;
+            i++;
+        }
+    }
+
+    // Start the image cycling
+    cycleInterval = setInterval(cycle, 500);
+
+    return {
+        // Pause the image cycling for a given time (in milliseconds)
+        pause: function (time) {
+            clearInterval(cycleInterval);
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    cycleInterval = setInterval(cycle, 500);
+                    resolve();
+                }, time);
+            });
+        },
+        // Stop the image cycling
+        stop: function () {
+            clearInterval(cycleInterval);
+        },
+    };
+}
+
+// Function to start image cycling
+function startImgCycle() {
+    const imgCycle = ImgCycle();
+    return imgCycle;
+}
+
+
+// Function to stop image cycling
+function stopImgCycle() {
+    if (cycleInterval) {
+        clearInterval(cycleInterval);
+    }
+}
+
+
+
 
 function gamer() {
     let heart1 = document.getElementById("heart1");
@@ -23,6 +83,13 @@ function gamer() {
     let heart7 = document.getElementById("heart7");
     let heart8 = document.getElementById("heart8");
 
+
+    function handleClick(choice) {
+        playerOneChoice = choice;
+        CpuGameChoices(playerOneChoice, cpuChoice);
+    }
+
+    let playerTwo = document.getElementById("playerTwo");
     let playerOneImg = document.getElementById("playerOneImg");
     let playerTwoImg = document.getElementById("playerTwoImg");
     let rockButton = document.getElementById("rockButton");
@@ -30,29 +97,49 @@ function gamer() {
     let scissorsButton = document.getElementById("scissorsButton");
     let lizardButton = document.getElementById("lizardButton");
     let spockButton = document.getElementById("spockButton");
+    let bestOfNum = document.getElementById("bestOfNum")
+    let turn = document.getElementById("turn");
     playerOneHP = gameModeSet;
     console.log(playerOneHP)
     playerTwoHP = playerOneHP;
-    rockButton.addEventListener('click', function(){
-        playerOneChoice = "Rock";
-        CpuGameChoices(playerOneChoice, cpuChoice);
+
+    if(isPlayCpuTrue) {
+        playerTwo.innerHTML="CPU";
+        turn.innerHTML="";
+    }
+    bestOfNum.innerHTML = `First To ${gameModeSet}`
+
+
+    rockButton.addEventListener('click', function () {
+        if (!isPaused) {
+            handleClick("Rock");
+        }
     });
-    paperButton.addEventListener('click', function(){
-        playerOneChoice = "Paper";
-        CpuGameChoices(playerOneChoice, cpuChoice);
+
+    paperButton.addEventListener('click', function () {
+        if (!isPaused) {
+            handleClick("Paper");
+        }
     });
-    scissorsButton.addEventListener('click', function(){
-        playerOneChoice = "Scissors";
-        CpuGameChoices(playerOneChoice, cpuChoice);
+
+    scissorsButton.addEventListener('click', function () {
+        if (!isPaused) {
+            handleClick("Scissors");
+        }
     });
-    lizardButton.addEventListener('click', function(){
-        playerOneChoice = "Lizard";
-        CpuGameChoices(playerOneChoice, cpuChoice);
+
+    lizardButton.addEventListener('click', function () {
+        if (!isPaused) {
+            handleClick("Lizard");
+        }
     });
-    spockButton.addEventListener('click', function(){
-        playerOneChoice = "Spock";
-        CpuGameChoices(playerOneChoice, cpuChoice);
+
+    spockButton.addEventListener('click', function () {
+        if (!isPaused) {
+            handleClick("Spock");
+        }
     });
+    ImgCycle();
 }
 
 
@@ -64,12 +151,12 @@ async function getData(){
 }
 
 async function CpuGameChoices(playerOneChoice, cpuChoice) {
+    isPaused = true;
+    stopImgCycle();
     playerOneChoice = await playerOneChoice;
     playerTwoChoice = await getData();
     playerOneImg.src=`../Assets/Imgs/${playerOneChoice}.png`;
     playerTwoImg.src=`../Assets/Imgs/${playerTwoChoice}.png`;
-
-    let playerOne
 
     let index1 = playOptions.indexOf(playerOneChoice);
     let index2 = playOptions.indexOf(playerTwoChoice);
@@ -90,6 +177,17 @@ async function CpuGameChoices(playerOneChoice, cpuChoice) {
         console.log(playerOneHP, playerTwoHP)
     }
     HealthStates()
+    
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    
+    isPaused = false;
+    if(playerOneisWin) {
+        EndScreen();
+    } else if(playerTwoisWin) {
+        EndScreen();
+    } else {
+        startImgCycle();
+    }
 }
 
 async function HealthStates() {
@@ -113,6 +211,8 @@ async function HealthStates() {
             heart2.style="opacity: 0;"
             heart1.classList.remove("pulse")
             heart1.style="opacity: 0;"
+            playerTwoisWin = true;
+            console.log(playerTwoisWin)
             break;
     }
     switch(playerTwoHP) {
@@ -135,9 +235,11 @@ async function HealthStates() {
             heart7.style="opacity: 0;"
             heart8.classList.remove("pulse")
             heart8.style="opacity: 0;"
+            playerOneisWin = true;
+            console.log(playerOneisWin)
             break;
     }
 }
 
 
-export { playerOneHP, playerTwoHP, getData, CpuGameChoices, HealthStates, gameIsTrue, gamer };
+export { playerOneHP, playerTwoHP, getData, CpuGameChoices, HealthStates, gameIsTrue, gamer, ImgCycle, playerOneisWin, playerTwoisWin };

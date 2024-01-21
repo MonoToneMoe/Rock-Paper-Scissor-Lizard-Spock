@@ -153,3 +153,50 @@ h2 {
     font-size: 48px;
     -webkit-text-stroke: white 1px;
 }
+
+
+.endScreenTitle {
+    margin-top: 77px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    border-radius: 25px;
+    background-color: #643692;
+    height: 10.16%;
+    width: 508px;
+}
+
+.myRow {
+    padding: 10px;
+}
+
+.endScreenTitleText {
+    font-size: 96px;
+    color: white;
+}
+.LoseToCpu {
+    justify-content: center; display: flex; align-items: end; margin-left: 22.5vw; margin-right: auto; margin-top: 75px;
+}
+.beatCpu {
+    justify-content: center; display: flex; align-items: end; margin-left: auto; margin-right: auto; margin-top: 75px; margin-bottom: 75px;
+}
+.emojiHead {
+    height: 325px;
+}
+.emojiHand {
+    height: 162px;
+}
+.endScreenButtons {
+    display: grid;
+    justify-content: center;
+    grid-template-columns: 350px 350px;
+    column-gap: 32px;
+    align-items: center;
+    margin-top: 75px;
+}
+.LoseToPerson {
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+}

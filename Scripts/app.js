@@ -1,8 +1,9 @@
-import { playerOneHP, playerTwoHP, getData, CpuGameChoices, gamer, HealthStates } from "./game.js";
+import { gamer, HealthStates, playerOneisWin, playerTwoisWin } from "./game.js";
 
 let mainMenuIsTrue = true;
 let gameModeMenuIsTrue = false;
 let gameIsTrue = false;
+let endScreenIsTrue = false;
 
 let isPlayCpuTrue = false;
 let isPlayPersonTrue = false;
@@ -13,6 +14,7 @@ let gameModeSet = 0;
 let body = document.getElementById("body");
 
 async function SiteLoad() {
+    mainMenuIsTrue = true;
     body.innerHTML = `
         <div class="container-fluid menuBox">
             <div class="row">
@@ -43,6 +45,8 @@ SiteLoad();
 
 
 function GameModes() {
+    mainMenuIsTrue = false;
+    gameModeMenuIsTrue = true;
     body.innerHTML = `
         <div class="container-fluid menuBox">
             <div class="row">
@@ -88,7 +92,7 @@ function Game() {
                 <h2>Player 1</h2>
             </div>
             <div class="col topRightRow">
-                <h2>...</h2>
+                <h2 id=playerTwo>...</h2>
                 <div id="boxBg" class="health">
                     <img id="heart5" class="heart" src="./Assets/Imgs/heart.png" alt="">
                     <img id="heart6" class="heart" src="./Assets/Imgs/heart.png" alt="">
@@ -104,8 +108,8 @@ function Game() {
         <div class="myRow">
             <div id="boxBg" class="col"><img id="playerOneImg" src="./Assets/Imgs/questionMark.png" alt=""></div>
             <div class="col infoCol">
-                <p>BEST OF</p>
-                <p>Turn</p>
+                <p id="bestOfNum">BEST OF</p>
+                <p id="turn">Turn</p>
             </div>
             <div id="boxBg" class="col"><img id="playerTwoImg" src="./Assets/Imgs/questionMark.png" alt=""></div>
         </div>
@@ -149,6 +153,143 @@ function Game() {
         </div>
     </div>
     `
+}
+
+function EndScreen() {
+    gameIsTrue = false;
+    endScreenIsTrue = true;
+    if(isPlayCpuTrue) {
+        if(playerTwoisWin) {
+            body.innerHTML = `
+            <div class="container-fluid endScreenTitle">
+            <div class="myRow">
+                <h1 class="endScreenTitleText">YOU LOSE</h1>
+            </div>
+        </div>
+    
+        <div class="container-fluid LoseToCpu">
+            <div class="floater">
+                <img class="emojiHand" id="endScreenMiddleHand" src="./Assets/Imgs/point.png" alt="">
+                <img class="emojiHead" id="endScreenMiddleHead" src="./Assets/Imgs/joy.png" alt="">
+            </div>
+        </div>
+    
+        <div class="container-fluid" style="margin: auto;">
+            <div class="endScreenButtons">
+                <button class="pushable">
+                    <span class="front">
+                        Play Again
+                    </span>
+                    </button>
+                    <button class="pushable">
+                    <span class="front">
+                        Main Menu
+                    </span>
+                </button>
+            </div>
+        </div>
+            `
+        } else if(playerOneisWin) {
+            body.innerHTML = `
+            <div class="container-fluid endScreenTitle">
+            <div class="myRow">
+                <h1 class="endScreenTitleText">YOU LOSE</h1>
+            </div>
+        </div>
+    
+        <div class="container-fluid LoseToCpu">
+            <div>
+                <img class="emojiHead" id="endScreenMiddleHead" src="./Assets/Imgs/moai.png" alt="">
+            </div>
+        </div>
+    
+        <div class="container-fluid" style="margin: auto;">
+            <div class="endScreenButtons">
+                <button class="pushable">
+                    <span class="front">
+                        Play Again
+                    </span>
+                    </button>
+                    <button class="pushable">
+                    <span class="front">
+                        Main Menu
+                    </span>
+                </button>
+            </div>
+        </div>
+            `
+        }
+    } else if(isPlayPersonTrue) {
+        if(playerOneisWin) {
+            body.innerHTML = `
+            <div class="container-fluid endScreenTitle">
+        <div class="myRow">
+            <h1 class="endScreenTitleText">YOU LOSE</h1>
+        </div>
+    </div>
+
+    <div class="container-fluid LoseToPerson">
+        <div class="floater">
+            <img class="emojiHead" id="endScreenMiddleHead" src="./Assets/Imgs/joy.png" alt="">
+            <img class="emojiHand" src="./Assets/Imgs/rightPoint.png" alt="">
+        </div>
+        <div>
+            <img class="emojiHead" src="./Assets/Imgs/clown.png" alt="">
+        </div>
+    </div>
+
+    <div class="container-fluid" style="margin: auto;">
+        <div class="endScreenButtons">
+            <button class="pushable">
+                <span class="front">
+                    Play Again
+                </span>
+                </button>
+                <button class="pushable">
+                <span class="front">
+                    Main Menu
+                </span>
+            </button>
+        </div>
+    </div>
+            `
+        } else if(playerTwoisWin) {
+            body.innerHTML = `
+            <div class="container-fluid endScreenTitle">
+        <div class="myRow">
+            <h1 class="endScreenTitleText">YOU LOSE</h1>
+        </div>
+    </div>
+
+    <div class="container-fluid LoseToPerson">
+        <div>
+            <img class="emojiHead" src="./Assets/Imgs/clown.png" alt="">
+        </div>
+        <div class="floater">
+            <img class="emojiHand" src="./Assets/Imgs/leftPoint.png" alt="">
+            <img class="emojiHead" id="endScreenMiddleHead" src="./Assets/Imgs/joy.png" alt="">
+        </div>
+    </div>
+
+    <div class="container-fluid" style="margin: auto;">
+        <div class="endScreenButtons">
+            <button class="pushable">
+                <span class="front">
+                    Play Again
+                </span>
+                </button>
+                <button class="pushable">
+                <span class="front">
+                    Main Menu
+                </span>
+            </button>
+        </div>
+    </div>
+            `
+        }
+
+    }
+    
 }
 
 if(mainMenuIsTrue) {
@@ -230,4 +371,4 @@ if(gameModeMenuIsTrue) {
 }
 
 
-export { gameModeSet, gameModeLives, gameIsTrue };
+export { gameModeSet, gameModeLives, gameIsTrue, isPlayCpuTrue, EndScreen };
