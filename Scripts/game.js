@@ -35,11 +35,9 @@ function ImgCycle() {
         }
     }
 
-    // Start the image cycling
     cycleInterval = setInterval(cycle, 500);
 
     return {
-        // Pause the image cycling for a given time (in milliseconds)
         pause: function (time) {
             clearInterval(cycleInterval);
             return new Promise(resolve => {

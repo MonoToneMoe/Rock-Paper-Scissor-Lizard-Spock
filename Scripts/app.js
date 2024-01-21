@@ -1,4 +1,4 @@
-import { gamer, HealthStates, playerOneisWin, playerTwoisWin } from "./game.js";
+import { gamer, HealthStates, playerOneHP, playerOneisWin, playerTwoHP, playerTwoisWin } from "./game.js";
 
 let mainMenuIsTrue = true;
 let gameModeMenuIsTrue = false;
@@ -40,6 +40,7 @@ async function SiteLoad() {
             </div>
         </div>
     `;
+    MainMenuFunction()
 }
 SiteLoad();
 
@@ -79,6 +80,8 @@ function GameModes() {
 }
 
 function Game() {
+    gameModeMenuIsTrue = false;
+    gameIsTrue = true;
     body.innerHTML = `
     <div class="container-fluid">
         <div class="myRow">
@@ -156,6 +159,7 @@ function Game() {
 }
 
 function EndScreen() {
+
     gameIsTrue = false;
     endScreenIsTrue = true;
     if(isPlayCpuTrue) {
@@ -176,12 +180,12 @@ function EndScreen() {
     
         <div class="container-fluid" style="margin: auto;">
             <div class="endScreenButtons">
-                <button class="pushable">
+                <button id="playAgain" class="pushable">
                     <span class="front">
                         Play Again
                     </span>
                     </button>
-                    <button class="pushable">
+                    <button id="menuButton" class="pushable">
                     <span class="front">
                         Main Menu
                     </span>
@@ -205,12 +209,12 @@ function EndScreen() {
     
         <div class="container-fluid" style="margin: auto;">
             <div class="endScreenButtons">
-                <button class="pushable">
+                <button id="playAgain" class="pushable">
                     <span class="front">
                         Play Again
                     </span>
                     </button>
-                    <button class="pushable">
+                    <button id="menuButton" class="pushable">
                     <span class="front">
                         Main Menu
                     </span>
@@ -240,12 +244,12 @@ function EndScreen() {
 
     <div class="container-fluid" style="margin: auto;">
         <div class="endScreenButtons">
-            <button class="pushable">
+            <button id="playAgain" class="pushable">
                 <span class="front">
                     Play Again
                 </span>
                 </button>
-                <button class="pushable">
+                <button id="menuButton" class="pushable">
                 <span class="front">
                     Main Menu
                 </span>
@@ -273,12 +277,12 @@ function EndScreen() {
 
     <div class="container-fluid" style="margin: auto;">
         <div class="endScreenButtons">
-            <button class="pushable">
+            <button id="playAgain" class="pushable">
                 <span class="front">
                     Play Again
                 </span>
                 </button>
-                <button class="pushable">
+                <button id="menuButton" class="pushable">
                 <span class="front">
                     Main Menu
                 </span>
@@ -289,10 +293,11 @@ function EndScreen() {
         }
 
     }
+    EndScreenFunctions();
     
 }
 
-if(mainMenuIsTrue) {
+function MainMenuFunction() {
     let playCpuButton = document.getElementById("playCpuButton");
     let playPersonButton = document.getElementById("playPersonButton");
 
@@ -319,35 +324,35 @@ if(mainMenuIsTrue) {
 
 function asdfsdf() {
     let oneLife = document.getElementById("oneLife");
-let threeLives = document.getElementById("threeLives");
-let fourLives = document.getElementById("fourLives");
+    let threeLives = document.getElementById("threeLives");
+    let fourLives = document.getElementById("fourLives");
 
     oneLife.addEventListener('click', function(){
         gameModeSet = gameModeLives[0];
         Game();
         gamer();
-        HealthStates();
         gameModeMenuIsTrue = false;
         gameIsTrue = true;
-        console.log(gameModeSet)
+        console.log(gameModeSet);
+        HealthStates();
     });
     threeLives.addEventListener('click', function(){
         gameModeSet = gameModeLives[1];
         Game();
         gamer();
-        HealthStates();
         gameModeMenuIsTrue = false;
         gameIsTrue = true;
         console.log(gameModeSet);
+        HealthStates();
     });
     fourLives.addEventListener('click', function(){
         gameModeSet = gameModeLives[2];
         Game();
         gamer();
-        HealthStates();
         gameModeMenuIsTrue = false;
         gameIsTrue = true;
         console.log(gameModeSet);
+        HealthStates();
     });
 }
 
@@ -357,16 +362,40 @@ let fourLives = document.getElementById("fourLives");
 if(gameModeMenuIsTrue) {
     oneLife.addEventListener('click', function(){
         gameModeSet = gameModeLives[0];
-        console.log("working");
+        HealthStates();
         console.log(gameModeSet)
     });
     threeLives.addEventListener('click', function(){
         gameModeSet = gameModelives[2];
+        HealthStates();
         console.log(gameModeSet);
     });
     fourLives.addEventListener('click', function(){
         gameModeSet = gameModeLives[3];
+        HealthStates();
         console.log(gameModeSet);
+    });
+}
+
+function EndScreenFunctions() {
+    console.log(endScreenIsTrue);
+    let menuButton = document.getElementById("menuButton");
+    let playAgainButton = document.getElementById("playAgain");
+
+    menuButton.addEventListener('click', function(){
+        SiteLoad();
+        gameModeSet = 0;
+        isPlayCpuTrue = false;
+        isPlayPersonTrue = false;
+        endScreenIsTrue = false;
+        mainMenuIsTrue = true;
+    });
+    playAgainButton.addEventListener('click', function(){
+        Game();
+        gamer();
+        HealthStates();
+        gameIsTrue = true;
+        endScreenIsTrue = false;
     });
 }
 
